@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block con %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="container mt-5 mb-5" style="font-size: 20px; font-weight: bold; width: 80%;">
+            <h1><b>게시글수정</b></h1>
+            <div class="mb-3 mt-5">
+                <label class="form-label">SUBJECT</label>
+                <input type="text" class="form-control" value="{{ b.writer }}" name="sub">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">WRITER</label>
+                <input type="text" class="form-control" disabled value="{{ user }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">CONTENT</label>
+                <textarea class="form-control" style="height: 100px;" name="con">{{ b.content }}</textarea>
+            </div>
+            <div class="text-end mt-3">
+                <button class="btn btn-dark">수정하기</button>
+            </div> 
+        </div>
+    </form>
+{% endblock %}

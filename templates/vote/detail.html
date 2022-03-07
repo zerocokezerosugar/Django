@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load mathfilters %}
+{% block con %}
+<div class="container mt-5 mb-5">
+        <h1>Vote Page👀</h1>
+        
+        <hr>
+    <div class="text-end">
+        <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+            POST💖
+        </button>
+    </div>
+    <hr>
+    <div class="row mt-5">
+        <div class="col-lg-8"><textarea class="form-control" style="height: 300px;" disabled>{{ t.content }}</textarea></div>
+        <div class="col-lg-4" style="margin:auto">
+            <img src="{{ t.maker.getpic }}" width="100%">
+            <div class="text-center">
+                made by <b>{{ t.maker }}</b>
+                <br>{{ t.pubdate | date:'y.m.d  H:i' }}
+            </div>
+        </div>
+    </div>
+    <hr>
+    {% if user in t.voter.all %}
+        <div class="row mt-2">
+            {% for i in cset %}
+                <div class="col-lg-4">
+                    
+                    <div class="mt-2 mb-2 text-center">
+                        {{ i.chname }}
+                    </div>
+                    <img src="{{ i.getpic }}" width="100%">
+                    <div class="progress mt-2">
+                        <div class="progress-bar" role="progressbar" style="width: {{ i.choicer.all.count | div:t.voter.all.count | mul:100 }}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                            {{ i.choicer.all.count | div:t.voter.all.count | mul:100 }}%</div>
+                    </div>
+                    
+                </div>
+            {% endfor %}
+            <a href="{% url 'vote:cancel' t.id %}"><button class="btn btn-danger btn-lg">취소하기</button>  </a>
+        </div>
+    {% else %}
+        <form method="post" action="{% url 'vote:vote' t.id %}">
+            {% csrf_token %}
+            <div class="row mt-2">
+                {% for i in cset %}
+                    <div class="col-lg-4">
+                        
+                        <div class="mt-2 mb-2 text-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="ch" value="{{ i.id }}" {% if forloop.first %}checked{% endif %}>
+                            </div>
+                            {{ i.chname }}
+                        </div>
+                        <img src="{{ i.getpic }}" width="100%">
+                        <textarea class="form-control mt-2" disabled>{{ i.chcom }}</textarea>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="text-center mt-4">
+                <button class="btn btn-dark btn-lg">투표하기</button>  
+            </div>
+        </form>
+    {% endif %}
+    {% if user == t.maker %}
+        <div class="text-end">
+            <a href="{% url 'vote:del' t.id %}"><button class="btn btn-danger">주제 삭제</button></a>
+        </div>    
+    {% endif %}
+</div>
+
+
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">북마크 추가 알림</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+
+    <form method="post" action="{% url 'book:create' %}">
+        {% csrf_token %}
+        <div class="modal-body">
+        <!-- 밑에는 중요도 -->
+        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+            <input type="checkbox" name="info" class="btn-check" id="btncheck2" autocomplete="off">
+            <label class="btn btn-outline-warning" for="btncheck2">★</label>
+        </div>
+        <input type="hidden" name="sname" value="[투표]{{ t.subject }}">
+        <input type="hidden" name="surl" value="{{ request.path }}">
+        <b>사이트 설명</b> <input type="text" name="scom" class="form-control mt-2">
+        </div>
+    
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-primary">Save Add</button>
+    </div>
+    </form> 
+    </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load mathfilters %}
+{% block con %}
+
+<div class="container mt-5 row" style="width:100%">
+    <h1><b>번역기</b></h1>
+    <table class="table table-striped table-hover mt-4">
+        <thead>
+            <tr>
+               
+            </tr>
+        </thead>
+        
+    </table>
+    <form method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-lg-5">
+                <textarea class="form-control" rows="10" cols="40" name="bf" 
+                placeholder="입력해주세요">{{text}}</textarea>
+            </div>
+
+            <div class="col-lg-2 text-center" style="margin: auto;">
+                <select name="fr" class="form-select" size="7" aria-label="size 7 select example">
+                    {% for code, name in ndict.items %}
+                        <option value="{{ code }}" {% if fr %}{% if fr == code %} selected {% endif %}{% else %}
+                        {% if code == 'ko'%}selected{% endif %}{% endif %}>{{ name | upper }}</option>
+                    {% endfor %}
+                </select>
+
+                <button class="btn btn-outline-dark mt-3 mb-3">번역</button>
+
+                <select name="to" class="form-select" size="7" aria-label="size 7 select example">
+                    {% for code, name in ndict.items %}
+                        <option value="{{ code }}" {% if to %}{% if to == code %} selected {% endif %}{% else %}
+                        {% if code == 'en' %}selected{% endif %}{% endif %}>{{ name | upper }}</option>
+                    {% endfor %} 
+                </select>
+            </div>
+
+            <div class="col-lg-5">
+                <textarea class="form-control"  rows="10" cols="40" disabled>{{af}}</textarea>
+            </div>
+        </div>
+    </form>
+    
+</div>
+   
+{% endblock %}

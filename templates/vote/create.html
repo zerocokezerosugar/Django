@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load mathfilters %}
+{% block con %}
+    <div class="container mt-5 mb-5" style="font-size: 20px; font-weight: bold; width: 80%;">
+        <h1><b>Topic 작성</b></h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3 mt-5">
+                <label class="form-label">SUBJECT</label>
+                <input type="text" class="form-control" name="sub">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Maker</label>
+                <input type="text" class="form-control" value="{{ user }}" disabled>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">CONTENT</label>
+                <textarea class="form-control" style="height: 100px;" name="con"></textarea>
+            </div>
+
+            <div class="text-center">
+                <button type="button" onclick="make()" class="btn btn-dark">보기 생성</button>
+            </div>
+            <div class="row" id="here">
+                
+            </div>   
+
+            <div class="text-end mt-3">
+                <button class="btn btn-success">생성</button>
+            </div>
+        </form>
+    </div>
+
+<script>
+    function make(){
+        d = document.getElementById("here")
+        n = document.createElement("div")
+        n.setAttribute('class', 'col-lg-4 mt-2')
+        n.innerHTML ='<input type="text" name="chname" class="form-control mt-5" placeholder="입력하세요">\
+                    <input type="file" name="pic" class="form-control mt-2 mb-2">\
+                    <textarea class="form-control" name="chcon" placeholder="설명해주세요"></textarea>'
+        d.appendChild(n)
+    }
+</script>
+{% endblock %}

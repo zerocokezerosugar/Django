@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load mathfilters %}
+{% block con %}
+    <div class="container mt-5">
+
+        <h1><b>북마크 생성</b></h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="text-end">
+                <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                    <input type="checkbox" name="info" class="btn-check" id="btncheck2" autocomplete="off">
+                    <label class="btn btn-outline-warning" for="btncheck2">★</label>
+                </div>
+            </div>
+        
+            <div class="mt-5 text-center"><input type="text" name="sname" class="form-control" placeholder="site name"></div>
+            <div class="mt-5 text-center"><input type="text" name="surl" class="form-control" placeholder="site url"></div>
+            <div class="mt-5 text-center"><textarea class="form-control" name="scom" placeholder="comment"></textarea></div>
+            <div class="mt-5 text-end"><button class="btn btn-outline-success">생성</button></div>
+        </form>
+        
+    </div>
+{% endblock %}

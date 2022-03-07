@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load mathfilters %}
+{% block con %}
+    <div class="container mt-5">
+        <div class="text-end">
+            <a href="{% url 'book:create' %}"><button class="btn btn-outline-dark mb-5">북마크생성</button></a>
+        </div>
+
+        <div class="row">
+            {% for i in bset %}
+                <div class="col-sm-6 mt-2">
+                    <div class="card">
+                        <div class="card-body" {% if i.impo %} style="background-color: bisque;" {% endif %}>
+                            <h5 class="card-title"><b>
+                                {% if i.impo %} {{ i.site_name }}💖 {% else %} {{ i.site_name }} {% endif %}</b></h5>
+                            <p class="card-text">{{ i.comment }}</p>
+                            <a href="{{ i.site_url }}" class="btn btn-primary">이동</a>
+                        </div>
+                    </div>
+                </div>           
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

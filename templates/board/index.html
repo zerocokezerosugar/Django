@@ -1,0 +1,92 @@
+
+{% extends 'base.html' %}
+{% load mathfilters %}
+{% block con %}
+    
+    <div class="container mt-5" style="width:100%">
+        <h1><b>웹서버 갤러리</b></h1>
+        <table class="table table-striped table-hover mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Subject</th>
+                    <th scope="col">Summary</th>
+                    <th scope="col">Writer</th>
+                    <th scope="col">Likey</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if bset %}
+                    {% for i in bset %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td><a class="sub" href="{% url 'board:detail' i.id %}">{{ i.subject }}</a></td>
+                            <td>{{ i.summary }}</td>
+                            <td>{{ i.writer }}</td>
+                            <td>{{ i.likey.all.count }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    {% if kw %}
+                        <tr>
+                            <td colspan="5">검색결과가 없습니다</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5">게시글을 작성해주세요</td>
+                        </tr>
+                    {% endif %}
+                {% endif %}
+            </tbody>
+        </table>
+        
+        <div class="row mt-5">
+            <div class="col-lg-10 text-center">
+                <form>
+                    <select name="cate">
+                        <option value="sub" {% if cate == "sub" %}selected{% endif %}>제목</option>
+                        <option value="wri" {% if cate == "wri" %}selected{% endif %}>글쓴이</option>
+                        <option value="con" {% if cate == "con" %}selected{% endif %}>내용</option>
+                        <input name="kw" type="text" size="50" value="{{kw}}"><button>검색</button>
+                    </select> 
+                </form>
+            </div>
+            <div class="col-lg-2 text-end">
+                <a href="{% url 'board:create' %}"><button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    글쓰기</button></a>
+            </div>    
+       </div>
+       
+    <div class="row">
+        <div class="col-lg-11">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination nav justify-content-center">
+                   
+                    {% if bset.has_previous %}
+                        <li class="page-item"><a class="page-link" href="{% url 'board:index' %}?page={{1}}&cate={{cate}}&kw={{kw}}">Home</a></li>
+                        <li class="page-item"><a class="page-link" href="{% url 'board:index' %}?page={{bset.previous_page_number}}&cate={{cate}}&kw={{kw}}">Previous</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link disabled">Home</a></li>
+                        <li class="page-item"><a class="page-link disabled">Previous</a></li>
+                    {% endif %}    
+                    {% for i in bset.paginator.page_range %}
+                        {% if i >= bset.number|sub:5 and i <= bset.number|add:4 %}
+                            <li class="page-item  {% if i == bset.number %}active{% endif %}"><a class="page-link" href="{% url 'board:index' %}?page={{i}}&cate={{cate}}&kw={{kw}}">{{i}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+        
+                    {% if chset.has_next %}
+                        <li class="page-item"><a class="page-link" href="{% url 'board:index' %}?page={{bset.next_page_number}}&cate={{cate}}&kw={{kw}}">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="{% url 'board:index' %}?page={{bset.paginator.num_pages}}&cate={{cate}}&kw={{kw}}">End</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link disabled">Next</a></li>
+                        <li class="page-item"><a class="page-link disabled">End</a></li>    
+                    {% endif %}    
+                </ul>
+            </nav>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>   
+    
+   
+{% endblock %}
